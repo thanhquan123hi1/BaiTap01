@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Login Page</title>
+<title>Register Page</title>
 
 <style>
     body {
@@ -24,7 +24,7 @@
         border-radius: 15px;
         box-shadow: 0 4px 25px rgba(0, 0, 0, 0.2);
         padding: 40px 50px;
-        width: 350px;
+        width: 380px;
         animation: fadeIn 0.6s ease-in-out;
     }
 
@@ -47,7 +47,9 @@
         margin-bottom: 5px;
     }
 
-    input[type=text], input[type=password] {
+    input[type=text], 
+    input[type=password],
+    input[type=email] {
         width: 100%;
         padding: 10px;
         border: 1px solid #ccc;
@@ -57,13 +59,13 @@
         transition: all 0.3s ease;
     }
 
-    input[type=text]:focus, input[type=password]:focus {
+    input:focus {
         border-color: #5563DE;
         box-shadow: 0 0 5px rgba(85, 99, 222, 0.5);
         outline: none;
     }
 
-    button[type=submit], .cancelbtn {
+    button[type=submit] {
         background-color: #5563DE;
         color: white;
         border: none;
@@ -72,20 +74,21 @@
         padding: 10px;
         width: 100%;
         font-size: 15px;
-        margin-top: 15px;
+        margin-top: 20px;
         transition: background 0.3s ease;
     }
 
-    .cancelbtn {
-        background-color: #aaa;
-    }
-
-    button:hover {
+    button[type=submit]:hover {
         background-color: #3c4bc5;
     }
 
-    .cancelbtn:hover {
-        background-color: #888;
+    .alert {
+        text-align: center;
+        color: #fff;
+        background-color: #e74c3c;
+        border-radius: 8px;
+        padding: 10px;
+        margin-bottom: 15px;
     }
 
     .login-link {
@@ -104,68 +107,38 @@
         text-decoration: underline;
     }
 
-    .remember-section {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-top: 10px;
-        font-size: 14px;
-    }
-
-    .remember-section a {
-        color: #5563DE;
-        text-decoration: none;
-    }
-
-    .remember-section a:hover {
-        text-decoration: underline;
-    }
-
-    .alert {
-        text-align: center;
-        color: #fff;
-        background-color: #e74c3c;
-        border-radius: 8px;
-        padding: 10px;
-        margin-bottom: 15px;
-    }
-
 </style>
 </head>
 <body>
 
-    <form action="${pageContext.request.contextPath}/login" method="post">
-        <h2>🔐 Login</h2>
+    <form action="${pageContext.request.contextPath}/register" method="post">
+
+        <h2>📝 Create Account</h2>
 
         <c:if test="${alert != null}">
             <div class="alert">${alert}</div>
         </c:if>
 
-        <label for="uname"><b>Username</b></label>
-        <input type="text" placeholder="Enter Username" 
-               name="uname" 
-               value="${rememberedUser}"
-               required>
+        <label>Username</label>
+        <input type="text" name="username" placeholder="Enter username" required>
 
-        <label for="psw"><b>Password</b></label>
-        <input type="password" placeholder="Enter Password" name="psw" required>
+        <label>Password</label>
+        <input type="password" name="password" placeholder="Enter password" required>
 
-        <div class="remember-section">
-            <label>
-                <input type="checkbox" 
-                       name="remember"
-                       <c:if test="${rememberedUser != null}">checked</c:if>
-                > Remember me
-            </label>
-            <span class="psw">Forgot <a href="${pageContext.request.contextPath}/forget">password?</a></span>
-        </div>
+        <label>Full Name</label>
+        <input type="text" name="fullname" placeholder="Enter your full name" required>
 
-        <button type="submit">Login</button>
-        <button type="button" class="cancelbtn">Cancel</button>
+        <label>Email</label>
+        <input type="email" name="email" placeholder="Enter your email" required>
+
+        <label>Phone</label>
+        <input type="text" name="phone" placeholder="Enter phone number" required>
+
+        <button type="submit">Register</button>
 
         <div class="login-link">
-            Don't have an account?
-            <a href="${pageContext.request.contextPath}/register">Register</a>
+            Already have an account?  
+            <a href="${pageContext.request.contextPath}/login">Login</a>
         </div>
     </form>
 

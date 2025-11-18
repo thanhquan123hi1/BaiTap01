@@ -31,6 +31,5 @@ public class WaitingController extends HttpServlet {
 		} else {
 		    resp.sendRedirect(req.getContextPath() + "/login");
 		}
-
 	}
 }
