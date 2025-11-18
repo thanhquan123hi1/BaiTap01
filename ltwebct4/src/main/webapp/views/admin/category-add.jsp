@@ -1,26 +1,26 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <title>Thêm danh mục mới</title>
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         body {
-            background-color: #f8f9fa; /* Màu nền xám đồng bộ */
+            background-color: #f8f9fa;
         }
         .card {
             border: none;
             border-radius: 12px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1); /* Đổ bóng mềm */
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
             overflow: hidden;
         }
         .card-header {
-            background: linear-gradient(45deg, #4e73df, #224abe); /* Gradient xanh */
+            background: linear-gradient(45deg, #4e73df, #224abe);
             color: white;
             padding: 1rem 1.5rem;
             font-weight: 600;
@@ -29,15 +29,15 @@
             font-weight: 500;
             color: #495057;
         }
-        .form-control:focus {
-            box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
-            border-color: #4e73df;
-        }
-        .form-icon {
-            color: #6c757d;
-            width: 20px;
-            text-align: center;
-            margin-right: 5px;
+        .preview-img {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            border: 1px solid #dee2e6;
+            background: white;
+            padding: 6px;
+            border-radius: 6px;
+            display: none;
         }
     </style>
 </head>
@@ -46,61 +46,88 @@
 
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8 col-lg-6"> <div class="card">
+            <div class="col-md-8 col-lg-6">
+
+                <div class="card">
                     <div class="card-header">
                         <i class="fa-solid fa-plus-circle me-2"></i> Thêm danh mục mới
                     </div>
                     
                     <div class="card-body p-4">
-                        <form action="${pageContext.request.contextPath}/admin/categories/add" method="post">
 
+                        <!-- FORM MULTIPART -->
+                        <form action="${pageContext.request.contextPath}/admin/categories/add"
+                              method="post"
+                              enctype="multipart/form-data">
+
+                            <!-- Tên danh mục -->
                             <div class="mb-4">
                                 <label class="form-label">
-                                    <i class="fa-solid fa-tag form-icon"></i>Tên danh mục <span class="text-danger">*</span>
+                                    <i class="fa-solid fa-tag me-2"></i>Tên danh mục <span class="text-danger">*</span>
                                 </label>
-                                <input type="text" 
-                                       class="form-control form-control-lg" 
-                                       name="cate_name" 
-                                       placeholder="Ví dụ: Điện tử, Thời trang..." 
+                                <input type="text"
+                                       class="form-control form-control-lg"
+                                       name="cate_name"
+                                       placeholder="Ví dụ: Điện thoại, Thời trang..."
                                        required>
                             </div>
 
+                            <!-- Upload icon -->
                             <div class="mb-4">
                                 <label class="form-label">
-                                    <i class="fa-solid fa-icons form-icon"></i>Icon
+                                    <i class="fa-solid fa-image me-2"></i>Icon (hình ảnh)
                                 </label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light"><i class="fa-solid fa-link"></i></span>
-                                    <input type="text" 
-                                           class="form-control" 
-                                           name="icons" 
-                                           placeholder="Nhập tên class icon (fa-user) hoặc đường dẫn ảnh">
+                                <input type="file"
+                                       class="form-control"
+                                       name="iconFile"
+                                       id="iconFile"
+                                       accept="image/*"
+                                       required>
+
+                                <!-- Preview -->
+                                <div class="mt-3">
+                                    <img id="preview" class="preview-img">
                                 </div>
-                                <div class="form-text text-muted small ms-1">
-                                    Có thể nhập mã icon FontAwesome hoặc URL hình ảnh.
+
+                                <div class="form-text text-muted small">
+                                    Chấp nhận: JPG, PNG, GIF — tải ảnh icon của danh mục.
                                 </div>
                             </div>
 
                             <hr class="my-4">
 
                             <div class="d-flex justify-content-end gap-2">
-                                <a href="${pageContext.request.contextPath}/admin/categories" 
+                                <a href="${pageContext.request.contextPath}/admin/categories"
                                    class="btn btn-light text-secondary border">
-                                    <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
+                                   <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
                                 </a>
-                                
+
                                 <button type="submit" class="btn btn-primary px-4 fw-bold">
                                     <i class="fa-solid fa-save me-1"></i> Lưu lại
                                 </button>
                             </div>
 
                         </form>
+
                     </div>
                 </div>
 
             </div>
         </div>
     </div>
+
+    <!-- Script Preview Ảnh -->
+    <script>
+        document.getElementById('iconFile').addEventListener('change', function(event) {
+            const preview = document.getElementById('preview');
+            const file = event.target.files[0];
+
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+                preview.style.display = 'block';
+            }
+        });
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>

@@ -11,7 +11,7 @@
     
     <style>
         body {
-            background-color: #f8f9fa; /* Màu nền xám nhẹ dịu mắt */
+            background-color: #f8f9fa;
         }
         .card {
             border: none;
@@ -19,7 +19,7 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
         }
         .card-header {
-            background: linear-gradient(45deg, #4e73df, #224abe); /* Gradient xanh hiện đại */
+            background: linear-gradient(45deg, #4e73df, #224abe);
             color: white;
             border-radius: 12px 12px 0 0 !important;
             padding: 1rem 1.5rem;
@@ -39,117 +39,122 @@
         .btn-action:hover {
             transform: translateY(-2px);
         }
-        .icon-badge {
-            font-family: monospace;
-            font-size: 0.9rem;
-            background-color: #e9ecef;
-            color: #495057;
-            padding: 4px 8px;
-            border-radius: 4px;
-            border: 1px solid #ced4da;
+        .icon-img {
+            width: 55px;
+            height: 55px;
+            object-fit: contain;
+            border: 1px solid #dee2e6;
+            background: #fff;
+            padding: 4px;
+            border-radius: 6px;
         }
     </style>
 </head>
 
-<body class="py-5"> <div class="container">
-        
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h4 class="m-0"><i class="fa-solid fa-folder-open me-2"></i>Quản lý danh mục</h4>
-                <a href="${pageContext.request.contextPath}/admin/categories/add" 
-                   class="btn btn-light text-primary fw-bold shadow-sm">
-                    <i class="fa-solid fa-plus me-1"></i> Thêm mới
-                </a>
-            </div>
+<body class="py-5">
 
-            <div class="card-body">
-                
-                <div class="row mb-3">
-                    <div class="col-md-4 ms-auto">
-                        <div class="input-group">
-                            <span class="input-group-text bg-white"><i class="fa-solid fa-search text-muted"></i></span>
-                            <input type="text" id="searchInput" class="form-control border-start-0" placeholder="Tìm kiếm danh mục...">
-                        </div>
+<div class="container">
+    <div class="card">
+
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h4 class="m-0"><i class="fa-solid fa-folder-open me-2"></i>Quản lý danh mục</h4>
+
+            <a href="${pageContext.request.contextPath}/admin/categories/add" 
+               class="btn btn-light text-primary fw-bold shadow-sm">
+                <i class="fa-solid fa-plus me-1"></i> Thêm mới
+            </a>
+        </div>
+
+        <div class="card-body">
+
+            <!-- Thanh tìm kiếm -->
+            <div class="row mb-3">
+                <div class="col-md-4 ms-auto">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white">
+                            <i class="fa-solid fa-search text-muted"></i>
+                        </span>
+                        <input type="text" id="searchInput" class="form-control border-start-0" 
+                               placeholder="Tìm kiếm danh mục...">
                     </div>
                 </div>
-
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle" id="cateTable">
-                        <thead>
-                            <tr>
-                                <th class="text-center" style="width: 80px;">ID</th>
-                                <th>Tên danh mục</th>
-                                <th>Icon Class</th> <th class="text-center" style="width: 180px;">Thao tác</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            <c:forEach var="c" items="${listcate}">
-                                <tr>
-                                    <td class="text-center fw-bold text-secondary">#${c.cate_id}</td>
-                                    
-                                    <td>
-                                        <span class="fw-bold text-dark">${c.cate_name}</span>
-                                    </td>
-
-                                    <td>
-                                        <span class="icon-badge">${c.icons}</span>
-                                        </td>
-
-                                    <td class="text-center">
-                                        <a class="btn btn-sm btn-outline-primary btn-action"
-                                           href="${pageContext.request.contextPath}/admin/categories/edit?id=${c.cate_id}"
-                                           title="Chỉnh sửa">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </a>
-
-                                        <a class="btn btn-sm btn-outline-danger btn-action"
-                                           href="${pageContext.request.contextPath}/admin/categories/delete?id=${c.cate_id}"
-                                           onclick="return confirm('Bạn có chắc muốn xóa danh mục: ${c.cate_name}?');"
-                                           title="Xóa">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                            </c:forEach>
-
-                            <c:if test="${empty listcate}">
-                                <tr>
-                                    <td colspan="4" class="text-center py-5">
-                                        <div class="text-muted">
-                                            <i class="fa-regular fa-folder-open fa-3x mb-3 d-block opacity-50"></i>
-                                            <span>Chưa có danh mục nào được tạo.</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </c:if>
-                        </tbody>
-                    </table>
-                </div>
             </div>
+
+            <!-- Bảng danh mục -->
+            <div class="table-responsive">
+                <table class="table table-hover align-middle" id="cateTable">
+                    <thead>
+                        <tr>
+                            <th class="text-center" style="width: 80px;">ID</th>
+                            <th>Tên danh mục</th>
+                            <th>Icon</th>
+                            <th class="text-center" style="width: 180px;">Thao tác</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <c:forEach var="c" items="${listcate}">
+                            <tr>
+                                <td class="text-center fw-bold text-secondary">#${c.cate_id}</td>
+
+                                <td class="fw-bold text-dark">${c.cate_name}</td>
+
+                                <td>
+                                    <img src="${pageContext.request.contextPath}/uploads/category/${c.icons}"
+                                         class="icon-img"
+                                         onerror="this.src='https://via.placeholder.com/60?text=No+Image';">
+                                </td>
+
+                                <td class="text-center">
+                                    <a class="btn btn-sm btn-outline-primary btn-action"
+                                       href="${pageContext.request.contextPath}/admin/categories/edit?id=${c.cate_id}"
+                                       title="Chỉnh sửa">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+
+                                    <a class="btn btn-sm btn-outline-danger btn-action"
+                                       href="${pageContext.request.contextPath}/admin/categories/delete?id=${c.cate_id}"
+                                       onclick="return confirm('Bạn có chắc muốn xóa danh mục: ${c.cate_name}?');"
+                                       title="Xóa">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </c:forEach>
+
+                        <c:if test="${empty listcate}">
+                            <tr>
+                                <td colspan="4" class="text-center py-5">
+                                    <div class="text-muted">
+                                        <i class="fa-regular fa-folder-open fa-3x mb-3 d-block opacity-50"></i>
+                                        <span>Chưa có danh mục nào được tạo.</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </c:if>
+                    </tbody>
+                </table>
+            </div>
+
         </div>
     </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Script tìm kiếm nhanh ở phía Client (không cần load lại trang)
-        document.getElementById('searchInput').addEventListener('keyup', function() {
-            var searchText = this.value.toLowerCase();
-            var tableRows = document.querySelectorAll('#cateTable tbody tr');
+<!-- Search script -->
+<script>
+document.getElementById('searchInput').addEventListener('keyup', function() {
+    var searchText = this.value.toLowerCase();
+    var tableRows = document.querySelectorAll('#cateTable tbody tr');
 
-            tableRows.forEach(function(row) {
-                // Bỏ qua dòng thông báo trống
-                if(row.innerText.trim() === "Chưa có danh mục nào được tạo.") return;
-
-                var rowText = row.innerText.toLowerCase();
-                if (rowText.includes(searchText)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-        });
-    </script>
+    tableRows.forEach(function(row) {
+        if (row.innerText.toLowerCase().includes(searchText)) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+});
+</script>
 
 </body>
 </html>

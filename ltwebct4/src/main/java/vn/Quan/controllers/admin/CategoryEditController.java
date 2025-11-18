@@ -1,16 +1,20 @@
 package vn.Quan.controllers.admin;
 
+import java.io.File;
 import java.io.IOException;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
 import vn.Quan.models.CategoryModel;
 import vn.Quan.services.impl.CategoryService;
 
 @WebServlet(urlPatterns = {"/admin/categories/edit"})
+@MultipartConfig
 public class CategoryEditController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -21,9 +25,8 @@ public class CategoryEditController extends HttpServlet {
             throws ServletException, IOException {
 
         int id = Integer.parseInt(req.getParameter("id"));
-        CategoryModel cate = cateService.findById(id);
+        req.setAttribute("cate", cateService.findById(id));
 
-        req.setAttribute("cate", cate);
         req.getRequestDispatcher("/views/admin/category-edit.jsp").forward(req, resp);
     }
 
@@ -35,12 +38,32 @@ public class CategoryEditController extends HttpServlet {
 
         int id = Integer.parseInt(req.getParameter("cate_id"));
         String name = req.getParameter("cate_name");
-        String icons = req.getParameter("icons");
 
-        CategoryModel cate = new CategoryModel(id, name, icons);
+        CategoryModel oldCate = cateService.findById(id);
 
+        Part filePart = req.getPart("iconFile");
+        String newFileName = filePart.getSubmittedFileName();
+
+        String uploadPath = req.getServletContext().getRealPath("/uploads/category/");
+
+        String finalFileName = oldCate.getIcons();
+
+        if (newFileName != null && !newFileName.isEmpty()) {
+
+            // Xóa ảnh cũ
+            File oldFile = new File(uploadPath + oldCate.getIcons());
+            if (oldFile.exists()) oldFile.delete();
+
+            // Lưu ảnh mới
+            finalFileName = System.currentTimeMillis() + "_" + newFileName;
+            filePart.write(uploadPath + finalFileName);
+        }
+
+        CategoryModel cate = new CategoryModel(id, name, finalFileName);
         cateService.update(cate);
+
         resp.sendRedirect(req.getContextPath() + "/admin/categories");
     }
 }
+
 

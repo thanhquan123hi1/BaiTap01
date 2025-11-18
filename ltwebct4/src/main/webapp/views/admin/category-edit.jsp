@@ -6,6 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Cập nhật danh mục</title>
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -18,40 +19,24 @@
             border-radius: 12px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.1);
         }
-        /* Header màu cam/vàng để phân biệt với trang Thêm (màu xanh) hoặc giữ màu xanh nếu muốn đồng bộ */
         .card-header {
-            background: linear-gradient(45deg, #f6c23e, #fd7e14); /* Gradient cam để báo hiệu là 'Sửa' */
+            background: linear-gradient(45deg, #f6c23e, #fd7e14);
             color: white;
             padding: 1rem 1.5rem;
             font-weight: 600;
         }
-        /* Hoặc nếu bạn thích màu xanh đồng bộ thì dùng đoạn dưới đây thay cho đoạn trên */
-        /*
-        .card-header {
-            background: linear-gradient(45deg, #4e73df, #224abe);
-        }
-        */
-        
         .form-label {
             font-weight: 500;
             color: #495057;
         }
-        .form-control:focus {
-            box-shadow: 0 0 0 0.2rem rgba(253, 126, 20, 0.25); /* Shadow màu cam */
-            border-color: #fd7e14;
-        }
-        .form-icon {
-            color: #6c757d;
-            width: 20px;
-            text-align: center;
-            margin-right: 5px;
-        }
-        .id-badge {
-            background-color: rgba(255,255,255,0.2);
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            float: right;
+        .preview-img {
+            width: 130px;
+            height: 130px;
+            object-fit: contain;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 6px;
+            background: white;
         }
     </style>
 </head>
@@ -65,18 +50,21 @@
                 <div class="card">
                     <div class="card-header">
                         <span><i class="fa-solid fa-pen-to-square me-2"></i> Cập nhật danh mục</span>
-                        <span class="id-badge"><i class="fa-solid fa-hashtag"></i> ID: ${cate.cate_id}</span>
+                        <span class="badge bg-light text-dark float-end">ID: ${cate.cate_id}</span>
                     </div>
 
                     <div class="card-body p-4">
                         
-                        <form action="${pageContext.request.contextPath}/admin/categories/edit" method="post">
+                        <form action="${pageContext.request.contextPath}/admin/categories/edit" 
+                              method="post" 
+                              enctype="multipart/form-data">
 
                             <input type="hidden" name="cate_id" value="${cate.cate_id}">
 
+                            <!-- Tên danh mục -->
                             <div class="mb-4">
                                 <label class="form-label">
-                                    <i class="fa-solid fa-tag form-icon"></i>Tên danh mục <span class="text-danger">*</span>
+                                    <i class="fa-solid fa-tag me-2"></i>Tên danh mục <span class="text-danger">*</span>
                                 </label>
                                 <input type="text" 
                                        class="form-control form-control-lg" 
@@ -85,20 +73,36 @@
                                        required>
                             </div>
 
+                            <!-- Icon hiện tại -->
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    <i class="fa-solid fa-image me-2"></i>Icon hiện tại
+                                </label>
+                                <div>
+                                    <img src="${pageContext.request.contextPath}/uploads/category/${cate.icons}" 
+                                         class="preview-img"
+                                         alt="Không có icon">
+                                </div>
+                            </div>
+
+                            <!-- Upload icon mới -->
                             <div class="mb-4">
                                 <label class="form-label">
-                                    <i class="fa-solid fa-icons form-icon"></i>Icon
+                                    <i class="fa-solid fa-upload me-2"></i>Chọn icon mới (tùy chọn)
                                 </label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light"><i class="fa-solid fa-link"></i></span>
-                                    <input type="text" 
-                                           class="form-control" 
-                                           name="icons" 
-                                           value="${cate.icons}"
-                                           placeholder="Class icon hoặc đường dẫn ảnh">
+                                <input type="file"
+                                       class="form-control"
+                                       name="iconFile"
+                                       id="iconFile"
+                                       accept="image/*">
+
+                                <!-- Preview -->
+                                <div class="mt-3">
+                                    <img id="preview" class="preview-img" style="display:none;">
                                 </div>
-                                <div class="form-text text-muted small ms-1">
-                                    Giá trị hiện tại: <strong>${cate.icons}</strong>
+
+                                <div class="form-text text-muted small">
+                                    Nếu không chọn ảnh mới → icon cũ sẽ được giữ nguyên.
                                 </div>
                             </div>
 
@@ -107,7 +111,7 @@
                             <div class="d-flex justify-content-end gap-2">
                                 <a href="${pageContext.request.contextPath}/admin/categories" 
                                    class="btn btn-light text-secondary border">
-                                    <i class="fa-solid fa-xmark me-1"></i> Hủy bỏ
+                                    <i class="fa-solid fa-arrow-left me-1"></i> Hủy bỏ
                                 </a>
                                 
                                 <button type="submit" class="btn btn-warning text-white fw-bold px-4">
@@ -123,6 +127,19 @@
             </div>
         </div>
     </div>
+
+    <!-- Preview ảnh mới -->
+    <script>
+        document.getElementById('iconFile').addEventListener('change', function(e) {
+            const preview = document.getElementById('preview');
+            const file = e.target.files[0];
+
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+                preview.style.display = 'block';
+            }
+        });
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
