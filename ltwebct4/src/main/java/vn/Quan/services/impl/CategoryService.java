@@ -7,51 +7,45 @@ import vn.Quan.dao.impl.CategoryDaoImpl;
 import vn.Quan.models.CategoryModel;
 import vn.Quan.services.ICategoryService;
 
-public class CategoryService implements ICategoryService{
+public class CategoryService implements ICategoryService {
 
-	public  ICategoryDao cateDao = new CategoryDaoImpl();
-		
-	@Override
-	public List<CategoryModel> findALL() {
-		return cateDao.findALL();
-	}
+    ICategoryDao cateDao = new CategoryDaoImpl();
+
+    @Override
+    public List<CategoryModel> findALL() {
+        return cateDao.findAll();
+    }
+
+    @Override
+    public CategoryModel findById(int id) {
+        return cateDao.findById(id);
+    }
+
+    @Override
+    public boolean insert(CategoryModel cate) {
+        return cateDao.insert(cate);
+    }
 
 	@Override
-	public CategoryModel findById(int id) {
-		return cateDao.findById(id);
-	}
-
-	@Override
-	public void insert(CategoryModel category) {
-		cateDao.insert(category);
-	}
-
-	@Override
-	public void update(CategoryModel category) {
+	public boolean update(CategoryModel category) {
 		
 		CategoryModel cate = new CategoryModel();
-		cate = cateDao.findById(category.getId());
+		cate = cateDao.findById(category.getCate_id());
 		
 		if (cate != null) {
-			cateDao.update(category);
+			return cateDao.update(category);
 		}
+		return false;
 	}
 
-	@Override
-	public void delete(int id) {
-		
+    @Override
+    public boolean delete(int id) {
 		CategoryModel cate = new CategoryModel();
 		cate = cateDao.findById(id);
 		
 		if (cate != null) {
-			cateDao.delete(id);
+			return cateDao.delete(id);
 		}
-		
-	}
-
-	@Override
-	public List<CategoryModel> findName(String keyword) {
-		return cateDao.findName(keyword);
-	}
-
+		return false;
+    }
 }

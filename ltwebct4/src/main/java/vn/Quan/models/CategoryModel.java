@@ -5,49 +5,48 @@ import java.io.Serializable;
 public class CategoryModel implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-	private int id;
-	private String name;
-	private String images;
-
+    private int cate_id;
+    private String cate_name;
+    private String icons;
+    
 	public CategoryModel() {
 		super();
 	}
 
-	public CategoryModel(int id, String name, String images) {
+	public CategoryModel(int cate_id, String cate_name, String icons) {
 		super();
-		this.id = id;
-		this.name = name;
-		this.images = images;
+		this.cate_id = cate_id;
+		this.cate_name = cate_name;
+		this.icons = icons;
 	}
 
-	public int getId() {
-		return id;
+	public int getCate_id() {
+		return cate_id;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setCate_id(int cate_id) {
+		this.cate_id = cate_id;
 	}
 
-	public String getName() {
-		return name;
+	public String getCate_name() {
+		return cate_name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setCate_name(String cate_name) {
+		this.cate_name = cate_name;
 	}
 
-	public String getImages() {
-		return images;
+	public String getIcons() {
+		return icons;
 	}
 
-	public void setImages(String images) {
-		this.images = images;
+	public void setIcons(String icons) {
+		this.icons = icons;
 	}
 
 	@Override
 	public String toString() {
-		return "CategoryModel [id=" + id + ", name=" + name + ", images=" + images + "]";
+		return "CategoryModel [cate_id=" + cate_id + ", cate_name=" + cate_name + ", icons=" + icons + "]";
 	}
-	
 	
 }
